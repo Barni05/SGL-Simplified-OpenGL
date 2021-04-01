@@ -4,23 +4,39 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Buffer.h"
+#include "VertexBufferLayout.h"
+#include "Shader.h"
+#include "Renderer.h"
+#include "VertexArray.h"
+#include "Utilities.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+#include <vector>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <string.h>
 
 
 #define ASSERT(x) if(x==0) __debugbreak();
-#define GLCall(x) GLClearError();\
+#define GLCall(x) ErrorTools::GLClearError();\
 	x;\
-	ASSERT(GLCheckError)
+	ASSERT(ErrorTools::GLCheckError)
 
-
-void GLClearError()
+class ErrorTools
 {
-	while (glGetError() != GL_NO_ERROR);
-}
-
-void GLCheckError()
-{
-	while (GLenum error = glGetError())
+public:
+	static inline void GLClearError()
 	{
-		std::cout << "[OpenGL Error] (" << error << ") " << std::endl;
+		while (glGetError() != GL_NO_ERROR);
 	}
-}
+
+	static inline void GLCheckError()
+	{
+		while (GLenum error = glGetError())
+		{
+			std::cout << "[OpenGL Error] (" << error << ") " << std::endl;
+		}
+	}
+};
